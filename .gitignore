@@ -60,6 +60,7 @@ replay_pid*
 log/
 target/
 .repository/
+pom.xml.versionsBackup
 
 # VI editor
 *.swp
@@ -77,3 +78,9 @@ btm*.log
 
 http-client.private.env.json
 *.tlog
+
+# Generated output files
+**/output/
+
+# System files
+.DS_Store
