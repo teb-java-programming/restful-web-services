@@ -53,6 +53,9 @@ replay_pid*
 *.iws
 *.uuid
 
+# DataGrip
+data/
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

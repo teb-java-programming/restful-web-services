@@ -2,17 +2,14 @@
 
 ## Modules
 
-#### Restful Web Services Spring Boot 2 (restful-web-services-springboot2)**
-
-#### Restful Web Services Spring Boot 3 (restful-web-services-springboot3)**
-
-#### Restful Web Services Spring Boot 4 (restful-web-services-springboot4)
+#### Restful Web Services Spring Boot (restful-web-services-spring-boot)**
 
 #### Restful Web Services JPA (restful-web-services-jpa)
 
-**The code works with older versions of dependencies that might no
-longer be supported or be secure. The dependencies are explicitly declared in the `pom.xml` as the parent module uses
-later versions.
+** Some submodules use older versions of dependencies that might no
+longer be supported or be secure, and therefore are skipped during build.
+The dependencies are explicitly declared in the respective `pom.xml` as the parent module uses
+latest versions.
 
 ***
 

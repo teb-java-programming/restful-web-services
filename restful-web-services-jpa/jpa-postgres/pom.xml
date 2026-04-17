@@ -6,15 +6,9 @@
 
     <parent>
         <groupId>com.teb.practice</groupId>
-        <artifactId>restful-web-services</artifactId>
+        <artifactId>restful-web-services-jpa</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>restful-web-services-jpa</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>jpa-h2</module>
-        <module>jpa-postgres</module>
-    </modules>
+    <artifactId>jpa-postgres</artifactId>
 </project>

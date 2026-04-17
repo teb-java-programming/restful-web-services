@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jwt_db?connectTimeout=10&socketTimeout=10
+    username: app_user
+    password: app_secure_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      initialization-fail-timeout: 0
+      connection-timeout: 10000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  sql:
+    init:
+      mode: never
+
+jwt:
+  secret: QmFzZTY0RW5jb2RlZFNlY3JldEtleU11c3RCZUF0TGVhc3QzMkJ5dGVz
+  expiration: 3600000
+  refresh:
+    expiration: 86400000
+  issuer: jwt-advanced
