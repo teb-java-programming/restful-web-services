@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class SecurityBasicApp {
+public class ObservabilityApp {
 
     public static void main(String[] args) {
 
-        run(SecurityBasicApp.class, args);
+        run(ObservabilityApp.class, args);
     }
 }
