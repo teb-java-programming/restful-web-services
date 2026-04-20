@@ -16,6 +16,7 @@
     <modules>
         <module>jwt-basic</module>
         <module>jwt-advanced</module>
+        <module>jwt-identity</module>
     </modules>
 
     <dependencies>

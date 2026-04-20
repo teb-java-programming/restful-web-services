@@ -1,6 +1,5 @@
 name: Restful Web Services CI
 
-# Run workflow on push or pull request to main branch
 on:
   push:
     branches: [ main ]
@@ -12,21 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Java (JDK 17)
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: 23
-          distribution: 'temurin'
+          java-version: 21
+          distribution: temurin
+          cache: maven
 
-      # Build project with Maven
-      - name: Build with Maven
-        run: mvn clean install
-
-      # Run tests
-      - name: Run tests
-        run: mvn test
+      - name: Build and test
+        run: ./mvnw clean install --batch-mode

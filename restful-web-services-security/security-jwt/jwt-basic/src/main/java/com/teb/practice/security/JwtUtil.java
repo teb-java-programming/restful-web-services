@@ -1,12 +1,13 @@
 package com.teb.practice.security;
 
+import static io.jsonwebtoken.Jwts.builder;
+import static io.jsonwebtoken.Jwts.parser;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.Base64.getDecoder;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,7 @@ public class JwtUtil {
 
     public String generateToken(String username, List<String> roles) {
 
-        return Jwts.builder()
+        return builder()
                 .subject(username)
                 .claim("roles", roles)
                 .claim("type", TOKEN_TYPE)
@@ -49,7 +50,7 @@ public class JwtUtil {
 
     public Claims extractClaims(String token) {
 
-        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+        return parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 
     public String extractUsername(String token) {

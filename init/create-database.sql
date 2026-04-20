@@ -1,4 +1,6 @@
 create
-database jpa_db;
+database jpa_postgres;
 create
-database jwt_db;
+database jwt_advanced;
+create
+database jwt_identity;
