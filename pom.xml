@@ -19,6 +19,7 @@
         <module>restful-web-services-spring-boot</module>
         <module>restful-web-services-jpa</module>
         <module>restful-web-services-security</module>
+        <module>restful-web-services-observability</module>
     </modules>
 
     <properties>

@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: restful-web-services-observability
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+  endpoint:
+    health:
+      show-details: always
+
+  info:
+    env:
+      enabled: true
+
+info:
+  module: restful-web-services-observability
+  topics: Actuator
+  build:
+    java: 23
+    framework: spring-boot
+
+logging:
+  level:
+    root: INFO
+    com.teb.practice: DEBUG
