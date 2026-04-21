@@ -30,22 +30,21 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public ResponseEntity<ApiResponse<List<User>>> getUsers() {
 
-        return userService.getUsers();
+        return status(200).body(new ApiResponse<>(userService.getUsers(), "Users retrieved"));
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<User>> getUser(@PathVariable String id) {
 
-        return userService.getUser(id);
+        return status(200).body(new ApiResponse<>(userService.getUser(id), "User retrieved"));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse<User>> createUser(@Valid @RequestBody User user) {
 
-        return status(201)
-                .body(new ApiResponse<>(userService.createUser(user), "User created"));
+        return status(201).body(new ApiResponse<>(userService.createUser(user), "User created"));
     }
 
     @PutMapping("/{id}")
