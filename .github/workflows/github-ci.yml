@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-stateless:
+    name: Build Stateless Modules
     runs-on: ubuntu-latest
 
     steps:
@@ -18,8 +19,53 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 23
-          distribution: 'temurin'
+          distribution: temurin
           cache: maven
 
-      - name: Build and test
-        run: ./mvnw clean install --batch-mode
+      - name: Build stateless modules
+        run: |
+          ./mvnw clean install \
+          -pl restful-web-services-observability,restful-web-services-security/security-basic \
+          -DskipTests \
+          --batch-mode
+
+  build-jpa:
+    name: Build JPA Modules
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 23
+          distribution: temurin
+          cache: maven
+
+      - name: Build JPA modules
+        run: |
+          ./mvnw clean install \
+          -pl restful-web-services-jpa/jpa-postgres \
+          --batch-mode
