@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>com.teb.practice</groupId>
-        <artifactId>security-jwt</artifactId>
+        <artifactId>restful-web-services-security</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>jwt-identity</artifactId>
+    <artifactId>security-identity</artifactId>
 
     <dependencies>
         <dependency>

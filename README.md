@@ -4,7 +4,11 @@
 
 #### Restful Web Services Spring Boot (restful-web-services-spring-boot)**
 
-#### Restful Web Services JPA (restful-web-services-jpa)
+#### Restful Web Services using JPA (restful-web-services-jpa)
+
+#### Restful Web Services using Actuator, Swagger (restful-web-services-observability)
+
+#### Restful Web Services with JWT (restful-web-services-security)
 
 ** Some submodules use older versions of dependencies that might no
 longer be supported or be secure, and therefore are skipped during build.
