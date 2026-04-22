@@ -1,24 +1,20 @@
 package com.teb.practice.controller;
 
-import static org.springframework.http.ResponseEntity.ok;
-
 import com.teb.practice.response.ApiResponse;
 
-import io.swagger.v3.oas.annotations.Operation;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
+@PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
 public class UserController {
 
-    @Operation(summary = "User API", description = "Basic authentication required")
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse<String>> test() {
+    @GetMapping("/home")
+    public ApiResponse<String> userHome() {
 
-        return ok(new ApiResponse<>("User endpoint test"));
+        return new ApiResponse<>("USER access granted");
     }
 }

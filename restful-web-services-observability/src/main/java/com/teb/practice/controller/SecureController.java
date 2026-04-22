@@ -1,8 +1,8 @@
 package com.teb.practice.controller;
 
+import com.teb.practice.dto.SecureResponse;
 import com.teb.practice.exception.ErrorResponse;
 import com.teb.practice.metrics.UserMetricsService;
-import com.teb.practice.model.User;
 import com.teb.practice.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/secure/users")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "User API", description = "User management operations")
-public class UserController {
+@Tag(name = "Secure User API", description = "User management operations with basic authentication")
+public class SecureController {
 
     private final UserService userService;
     private final UserMetricsService userMetricsService;
@@ -44,11 +44,11 @@ public class UserController {
                         content =
                                 @Content(
                                         mediaType = "application/json",
-                                        schema = @Schema(implementation = User.class)))
+                                        schema = @Schema(implementation = SecureResponse.class)))
             })
-    public List<User> getUsers() {
+    public List<SecureResponse> getUsers() {
 
-        List<User> users = userService.getUsers();
+        List<SecureResponse> users = userService.getUsers();
 
         userMetricsService.incrementApiCounter();
 
@@ -67,15 +67,15 @@ public class UserController {
                         content =
                                 @Content(
                                         mediaType = "application/json",
-                                        schema = @Schema(implementation = User.class))),
+                                        schema = @Schema(implementation = SecureResponse.class))),
                 @ApiResponse(
                         responseCode = "404",
                         description = "User not found",
                         content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
             })
-    public User getUser(@Valid @PathVariable String id) {
+    public SecureResponse getUser(@Valid @PathVariable String id) {
 
-        User user = userService.getUser(id);
+        SecureResponse user = userService.getUser(id);
 
         userMetricsService.incrementApiCounter();
 
