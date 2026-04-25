@@ -7,10 +7,10 @@ import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
 // Exclusion added to prevent spring-boot look for DB
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class JwtBasicApp {
+public class SecurityBasicApp {
 
     public static void main(String[] args) {
 
-        run(JwtBasicApp.class, args);
+        run(SecurityBasicApp.class, args);
     }
 }

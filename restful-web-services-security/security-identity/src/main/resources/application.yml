@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/jwt_identity?connectTimeout=10&socketTimeout=10
+    url: jdbc:postgresql://localhost:5432/security_identity_db?connectTimeout=10&socketTimeout=10
     username: app_user
     password: app_secure_pass
     driver-class-name: org.postgresql.Driver
@@ -35,4 +35,4 @@ jwt:
   expiration: 3600000
   refresh:
     expiration: 86400000
-  issuer: jwt-identity
+  issuer: security-identity

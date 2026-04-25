@@ -15,7 +15,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("JWT Demo API")
+                                .title("Security API")
                                 .version("1.0")
                                 .description("Spring JWT Security + Swagger"));
     }

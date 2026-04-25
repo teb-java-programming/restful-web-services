@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/jpa_postgres?connectTimeout=10&socketTimeout=10
+    url: jdbc:postgresql://localhost:5432/jpa_postgres_db?connectTimeout=10&socketTimeout=10
     username: app_user
     password: app_secure_pass
     driver-class-name: org.postgresql.Driver
