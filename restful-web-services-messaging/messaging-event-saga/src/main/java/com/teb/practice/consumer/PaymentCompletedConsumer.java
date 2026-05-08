@@ -1,9 +1,10 @@
 package com.teb.practice.consumer;
 
 import static com.teb.practice.event.SagaStatus.PAYMENT_COMPLETED;
-
 import static java.time.LocalDateTime.now;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teb.practice.entity.EventStatus;
 import com.teb.practice.event.KafkaTopics;
 import com.teb.practice.event.SagaEvent;
@@ -27,6 +28,7 @@ public class PaymentCompletedConsumer {
 
     
     private final EventStatusRepository eventStatusRepository;
+    private final ObjectMapper objectMapper;
     private final SagaOrchestrator sagaOrchestrator;
 
     @Transactional
@@ -49,20 +51,17 @@ public class PaymentCompletedConsumer {
 
         eventStatusRepository.save(
                 EventStatus.builder()
-                        .id(null)
-                        .sagaId(event.getSagaId())
+                        .sagaId(sagaId)
                         .eventType("PAYMENT")
                         .status("COMPLETED")
-                        .payload(null)
+                        .payload(objectMapper.convertValue(event, new TypeReference<>() {}))
                         .retryCount(0)
                         .createdAt(now())
                         .updatedAt(now())
                         .build());
 
-        // next step: notification
         event.setStatus(PAYMENT_COMPLETED);
 
-//        eventPublisher.publish(NOTIFICATION_SENT, event.getSagaId(), event);
         sagaOrchestrator.publishNotificationStep(event);
     }
 }

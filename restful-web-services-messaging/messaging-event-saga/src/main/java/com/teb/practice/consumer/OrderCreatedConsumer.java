@@ -2,7 +2,6 @@ package com.teb.practice.consumer;
 
 import static com.teb.practice.event.KafkaTopics.ORDER_CREATED;
 import static com.teb.practice.event.SagaStatus.INVENTORY_PENDING;
-
 import static java.time.LocalDateTime.now;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,12 +27,11 @@ import java.util.Optional;
 @Slf4j
 public class OrderCreatedConsumer {
 
-    
     private final EventStatusRepository eventStatusRepository;
     private final ObjectMapper objectMapper;
     private final SagaOrchestrator sagaOrchestrator;
 
-    @SneakyThrows
+
     @Transactional
     @KafkaListener(topics = ORDER_CREATED, groupId = "saga-group")
     public void consume(SagaEvent event) {
@@ -58,7 +56,6 @@ public class OrderCreatedConsumer {
 
         eventStatusRepository.save(
                 EventStatus.builder()
-                        .id(null)
                         .sagaId(sagaId)
                         .eventType("ORDER")
                         .status("RECEIVED")
@@ -68,10 +65,8 @@ public class OrderCreatedConsumer {
                         .updatedAt(now())
                         .build());
 
-        //         next step: inventory
         event.setStatus(INVENTORY_PENDING);
 
-//        eventPublisher.publish(INVENTORY_RESERVED, sagaId, event);
         sagaOrchestrator.publishInventoryStep(event);
     }
 }

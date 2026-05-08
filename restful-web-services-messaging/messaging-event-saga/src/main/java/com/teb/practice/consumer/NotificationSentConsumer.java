@@ -3,6 +3,8 @@ package com.teb.practice.consumer;
 import static com.teb.practice.event.SagaStatus.NOTIFICATION_SENT;
 import static java.time.LocalDateTime.now;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teb.practice.entity.EventStatus;
 import com.teb.practice.event.KafkaTopics;
 import com.teb.practice.event.SagaEvent;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class NotificationSentConsumer {
 
     private final EventStatusRepository eventStatusRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     @KafkaListener(topics = KafkaTopics.NOTIFICATION_SENT, groupId = "saga-group")
@@ -45,17 +48,15 @@ public class NotificationSentConsumer {
 
         eventStatusRepository.save(
                 EventStatus.builder()
-                        .id(null)
-                        .sagaId(event.getSagaId())
+                        .sagaId(sagaId)
                         .eventType("NOTIFICATION")
                         .status("SENT")
-                        .payload(null)
+                        .payload(objectMapper.convertValue(event, new TypeReference<>() {}))
                         .retryCount(0)
                         .createdAt(now())
                         .updatedAt(now())
                         .build());
 
-        // final step: no further event publishing
         event.setStatus(NOTIFICATION_SENT);
     }
 }
