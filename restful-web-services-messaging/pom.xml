@@ -15,7 +15,7 @@
 
     <modules>
         <module>messaging-basic</module>
-        <module>messaging-event-driven</module>
+        <module>messaging-event-saga</module>
     </modules>
 
     <dependencies>
