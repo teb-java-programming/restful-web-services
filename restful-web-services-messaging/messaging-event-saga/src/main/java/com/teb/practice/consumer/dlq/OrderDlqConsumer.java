@@ -18,7 +18,8 @@ public class OrderDlqConsumer {
     @KafkaListener(topics = ORDER_DLQ, groupId = "saga-dlq-group")
     public void consume(SagaEvent event) {
 
-        log.error("[SAGA:{}] [DLQ][ORDER] event={}",
+        log.error(
+                "[{}] Order DLQ event={}",
                 event != null ? event.getSagaId() : "UNKNOWN",
                 event);
     }

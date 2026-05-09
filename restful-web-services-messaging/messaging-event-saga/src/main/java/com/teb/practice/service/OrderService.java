@@ -19,22 +19,26 @@ public class OrderService {
 
     public void createOrder(SagaEvent sagaEvent) {
 
-        kafkaTemplate.send(ORDER_CREATED, sagaEvent.getSagaId(), sagaEvent)
-                .whenComplete((result, ex) -> {
+        kafkaTemplate
+                .send(ORDER_CREATED, sagaEvent.getSagaId(), sagaEvent)
+                .whenComplete(
+                        (result, throwable) -> {
+                            if (throwable != null) {
+                                log.error(
+                                        "[{}] Order publish failed",
+                                        sagaEvent.getSagaId(),
+                                        throwable);
 
-                    if (ex != null) {
-                        log.error("[SAGA:{}] [ORDER] publish failed",
-                                sagaEvent.getSagaId(),
-                                ex);
-                        return;
-                    }
+                                return;
+                            }
 
-                    var metadata = result.getRecordMetadata();
+                            var metadata = result.getRecordMetadata();
 
-                    log.info("[SAGA:{}] [ORDER] sent partition={} offset={}",
-                            sagaEvent.getSagaId(),
-                            metadata.partition(),
-                            metadata.offset());
-                });
+                            log.info(
+                                    "[{}] Order sent partition={} offset={}",
+                                    sagaEvent.getSagaId(),
+                                    metadata.partition(),
+                                    metadata.offset());
+                        });
     }
 }

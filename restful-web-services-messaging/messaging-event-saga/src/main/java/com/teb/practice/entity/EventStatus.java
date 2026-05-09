@@ -40,7 +40,6 @@ public class EventStatus {
     private String sagaId;
     private String eventType;
     @Setter private String status;
-    private Integer retryCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

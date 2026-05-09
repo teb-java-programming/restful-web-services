@@ -18,7 +18,8 @@ public class PaymentDlqConsumer {
     @KafkaListener(topics = PAYMENT_DLQ, groupId = "saga-dlq-group")
     public void consume(SagaEvent event) {
 
-        log.error("[SAGA:{}] [DLQ][PAYMENT] event={}",
+        log.error(
+                "[{}] Payment DLQ event={}",
                 event != null ? event.getSagaId() : "UNKNOWN",
                 event);
     }

@@ -18,7 +18,8 @@ public class InventoryDlqConsumer {
     @KafkaListener(topics = INVENTORY_DLQ, groupId = "saga-dlq-group")
     public void consume(SagaEvent event) {
 
-        log.error("[SAGA:{}] [DLQ][INVENTORY] event={}",
+        log.error(
+                "[{}] Inventory DLQ event={}",
                 event != null ? event.getSagaId() : "UNKNOWN",
                 event);
     }

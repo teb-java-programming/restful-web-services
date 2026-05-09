@@ -1,5 +1,7 @@
 package com.teb.practice.config;
 
+import static java.util.Optional.ofNullable;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.kafka.common.TopicPartition;
@@ -33,7 +35,7 @@ public class KafkaConfig {
     @Bean
     public DefaultErrorHandler errorHandler(KafkaTemplate<String, Object> kafkaTemplate) {
 
-        DefaultErrorHandler handler =
+        DefaultErrorHandler errorHandler =
                 new DefaultErrorHandler(
                         new DeadLetterPublishingRecoverer(
                                 kafkaTemplate,
@@ -42,16 +44,16 @@ public class KafkaConfig {
                                                 record.topic() + ".dlq", record.partition())),
                         new FixedBackOff(100L, 3));
 
-        handler.setRetryListeners(
+        errorHandler.setRetryListeners(
                 (record, e, attempt) ->
                         log.warn(
-                                "[SAGA:{}] RETRY attempt={} topic={} offset={}",
+                                "[{}] RETRY attempt={} topic={} offset={} reason={}",
                                 record.key(),
                                 attempt,
                                 record.topic(),
                                 record.offset(),
-                                e));
+                                ofNullable(e).map(Throwable::getMessage).orElse("UNKNOWN")));
 
-        return handler;
+        return errorHandler;
     }
 }
