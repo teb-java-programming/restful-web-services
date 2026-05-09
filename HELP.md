@@ -24,6 +24,15 @@ docker exec -it cache-redis redis-cli --> opens Redis command line
 docker exec -it cache-redis redis-cli FLUSHALL --> reset local Redis
 ```
 
+### Kafka
+```
+docker exec -it <container_name> \
+kafka-console-consumer \
+--bootstrap-server <env> \
+--topic <topic_name> \
+--from-beginning --> lists events received in the topic
+```
+
 ## Useful Links
 
 #### https://www.jwt.io

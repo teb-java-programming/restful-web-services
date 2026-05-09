@@ -20,5 +20,5 @@ public class SagaEvent {
     private String orderId;
     private String currentStage;
     private String status;
-    private boolean forceFail;
+    private String failAt;
 }

@@ -1,5 +1,6 @@
 package com.teb.practice.consumer;
 
+import static com.teb.practice.event.EventTypes.NOTIFICATION;
 import static com.teb.practice.event.EventTypes.PAYMENT;
 import static com.teb.practice.event.KafkaTopics.PAYMENT_COMPLETED;
 import static com.teb.practice.event.SagaStatus.NOTIFICATION_PENDING;
@@ -45,6 +46,10 @@ public class PaymentCompletedConsumer {
             return;
         }
 
+        if (PAYMENT.name().equals(event.getFailAt())) {
+            throw new RuntimeException("DLQ triggered");
+        }
+
         eventStatusRepository.save(
                 EventStatus.builder()
                         .sagaId(sagaId)
@@ -55,7 +60,7 @@ public class PaymentCompletedConsumer {
                         .updatedAt(now())
                         .build());
 
-        event.setCurrentStage("NOTIFICATION");
+        event.setCurrentStage(NOTIFICATION.name());
         event.setStatus(NOTIFICATION_PENDING);
 
         log.info("[{}] Payment completed event: {}", sagaId, event);

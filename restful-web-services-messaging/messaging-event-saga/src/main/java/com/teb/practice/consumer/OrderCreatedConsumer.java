@@ -1,5 +1,6 @@
 package com.teb.practice.consumer;
 
+import static com.teb.practice.event.EventTypes.INVENTORY;
 import static com.teb.practice.event.EventTypes.ORDER;
 import static com.teb.practice.event.KafkaTopics.ORDER_CREATED;
 import static com.teb.practice.event.SagaStatus.INVENTORY_PENDING;
@@ -45,7 +46,7 @@ public class OrderCreatedConsumer {
             return;
         }
 
-        if (event.isForceFail()) {
+        if (ORDER.name().equals(event.getFailAt())) {
             throw new RuntimeException("DLQ triggered");
         }
 
@@ -59,7 +60,7 @@ public class OrderCreatedConsumer {
                         .updatedAt(now())
                         .build());
 
-        event.setCurrentStage("INVENTORY");
+        event.setCurrentStage(INVENTORY.name());
         event.setStatus(INVENTORY_PENDING);
 
         log.info("[{}] Order received event: {}", sagaId, event);

@@ -32,7 +32,6 @@ public class OrderController {
                         .orderId(randomUUID().toString())
                         .currentStage(sagaEvent.getCurrentStage())
                         .status(sagaEvent.getStatus())
-                        .forceFail(sagaEvent.isForceFail())
                         .build());
 
         return "Order event sent";
@@ -47,7 +46,7 @@ public class OrderController {
                         .orderId("dlq-" + randomUUID())
                         .currentStage(sagaEvent.getCurrentStage())
                         .status(sagaEvent.getStatus())
-                        .forceFail(sagaEvent.isForceFail())
+                        .failAt(sagaEvent.getFailAt())
                         .build());
 
         return "Order event sent to DLQ";

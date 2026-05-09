@@ -16,11 +16,11 @@
     <version>1.0.0</version>
 
     <modules>
-<!--        <module>restful-web-services-spring-boot</module>-->
-<!--        <module>restful-web-services-observability</module>-->
-<!--        <module>restful-web-services-jpa</module>-->
-<!--        <module>restful-web-services-security</module>-->
-<!--        <module>restful-web-services-cache</module>-->
+        <module>restful-web-services-spring-boot</module>
+        <module>restful-web-services-observability</module>
+        <module>restful-web-services-jpa</module>
+        <module>restful-web-services-security</module>
+        <module>restful-web-services-cache</module>
         <module>restful-web-services-messaging</module>
     </modules>
 

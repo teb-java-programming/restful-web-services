@@ -35,7 +35,7 @@ public class OrderService {
                             var metadata = result.getRecordMetadata();
 
                             log.info(
-                                    "[{}] Order sent partition={} offset={}",
+                                    "[{}] [ORDER] sent partition={} offset={}",
                                     sagaEvent.getSagaId(),
                                     metadata.partition(),
                                     metadata.offset());

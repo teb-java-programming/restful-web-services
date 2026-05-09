@@ -42,7 +42,7 @@ public class KafkaConfig {
                                 (record, _) ->
                                         new TopicPartition(
                                                 record.topic() + ".dlq", record.partition())),
-                        new FixedBackOff(100L, 3));
+                        new FixedBackOff(1000L, 3));
 
         errorHandler.setRetryListeners(
                 (record, e, attempt) ->

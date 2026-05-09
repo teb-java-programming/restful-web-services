@@ -1,6 +1,7 @@
 package com.teb.practice.consumer;
 
 import static com.teb.practice.event.EventTypes.INVENTORY;
+import static com.teb.practice.event.EventTypes.PAYMENT;
 import static com.teb.practice.event.KafkaTopics.INVENTORY_RESERVED;
 import static com.teb.practice.event.SagaStatus.PAYMENT_PENDING;
 
@@ -45,6 +46,10 @@ public class InventoryReservedConsumer {
             return;
         }
 
+        if (INVENTORY.name().equals(event.getFailAt())) {
+            throw new RuntimeException("DLQ triggered");
+        }
+
         eventStatusRepository.save(
                 EventStatus.builder()
                         .sagaId(sagaId)
@@ -55,7 +60,7 @@ public class InventoryReservedConsumer {
                         .updatedAt(now())
                         .build());
 
-        event.setCurrentStage("PAYMENT");
+        event.setCurrentStage(PAYMENT.name());
         event.setStatus(PAYMENT_PENDING);
 
         log.info("[{}] Inventory reserved event: {}", sagaId, event);

@@ -21,19 +21,19 @@ public class SagaOrchestrator {
 
     public void publishInventoryStep(SagaEvent sagaEvent) {
 
-        log.info("[{}] publishing [INVENTORY] event", sagaEvent.getSagaId());
+        log.info("[{}] Publishing [INVENTORY] event", sagaEvent.getSagaId());
         kafkaTemplate.send(INVENTORY_RESERVED, sagaEvent.getSagaId(), sagaEvent);
     }
 
     public void publishPaymentStep(SagaEvent sagaEvent) {
 
-        log.info("[{}] publishing [PAYMENT] event", sagaEvent.getSagaId());
+        log.info("[{}] Publishing [PAYMENT] event", sagaEvent.getSagaId());
         kafkaTemplate.send(PAYMENT_COMPLETED, sagaEvent.getSagaId(), sagaEvent);
     }
 
     public void publishNotificationStep(SagaEvent sagaEvent) {
 
-        log.info("[{}] publishing [NOTIFICATION] event", sagaEvent.getSagaId());
+        log.info("[{}] Publishing [NOTIFICATION] event", sagaEvent.getSagaId());
         kafkaTemplate.send(NOTIFICATION_SENT, sagaEvent.getSagaId(), sagaEvent);
     }
 }

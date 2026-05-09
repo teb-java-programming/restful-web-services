@@ -62,7 +62,7 @@ data/
 ### Maven
 log/
 target/
-.eventStatusRepository/
+.repository/
 pom.xml.versionsBackup
 
 # VI editor
