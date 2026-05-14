@@ -16,6 +16,7 @@
     <modules>
         <module>messaging-basic</module>
         <module>messaging-event-saga</module>
+        <module>messaging-event-advanced</module>
     </modules>
 
     <dependencies>
@@ -26,6 +27,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
