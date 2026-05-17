@@ -27,6 +27,7 @@
     <properties>
         <java.version>23</java.version>
         <lombok.version>1.18.46</lombok.version>
+        <camel.version>4.20.0</camel.version>
         <jwt.version>0.13.0</jwt.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

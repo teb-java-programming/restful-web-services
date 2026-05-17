@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class MessagingBasicApp {
+public class MessagingCamelTransactionApp {
 
     public static void main(String[] args) {
 
-        run(MessagingBasicApp.class, args);
+        run(MessagingCamelTransactionApp.class, args);
     }
 }
