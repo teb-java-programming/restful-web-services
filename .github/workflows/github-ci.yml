@@ -23,13 +23,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 23
-          distribution: 'temurin'
+          distribution: temurin
           cache: maven
 
       - name: Build and test
-        run: ./mvnw clean install --batch-mode
+        run: ./mvnw clean verify
 
-      - name: Bump PATCH version
+      - name: Update PATCH version
         if: github.event_name == 'push'
         run: |
           CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -38,8 +38,7 @@ jobs:
           MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
           PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
 
-          NEW_PATCH=$((PATCH + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
 
           echo "Updating version: $CURRENT_VERSION -> $NEW_VERSION"
 
@@ -47,7 +46,7 @@ jobs:
             -DnewVersion=$NEW_VERSION \
             -DgenerateBackupPoms=false
 
-      - name: Commit and tag new version
+      - name: Commit and Tag
         if: github.event_name == 'push'
         run: |
           NEW_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -56,7 +55,7 @@ jobs:
           git config user.email "teb-github-ci-actions@users.noreply.github.com"
 
           git add .
-          git commit -m "ci: version update to $NEW_VERSION" || echo "No changes to commit"
+          git commit -m "ci: version update to $NEW_VERSION" || exit 0
 
           git tag "v$NEW_VERSION"
 
