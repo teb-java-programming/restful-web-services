@@ -29,7 +29,7 @@ jobs:
       - name: Build and Test
         run: ./mvnw clean verify
 
-      - name: Update PATCH version
+      - name: Update Version
         if: github.event_name == 'push'
         run: |
           CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -38,7 +38,14 @@ jobs:
           MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
           PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
 
-          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          if [[ "$COMMIT_MESSAGE" == *"Merge pull request"* ]]; then
+            echo "PR merge detected -> PATCH bump"
+            NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
+          else
+            echo "Direct push detected -> MINOR bump"
+            NEW_VERSION="$MAJOR.$((MINOR + 1)).0"
+          fi
 
           echo "Updating version: $CURRENT_VERSION -> $NEW_VERSION"
 
