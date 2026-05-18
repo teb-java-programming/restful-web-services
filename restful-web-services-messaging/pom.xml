@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.teb.practice</groupId>
         <artifactId>restful-web-services</artifactId>
-        <version>1.0.0</version>
+        <version>3.6.0</version>
     </parent>
 
     <artifactId>restful-web-services-messaging</artifactId>
@@ -17,6 +17,7 @@
         <module>messaging-basic</module>
         <module>messaging-event-saga</module>
         <module>messaging-camel-transaction</module>
+        <module>messaging-event-streams</module>
     </modules>
 
     <dependencies>
@@ -27,6 +28,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
