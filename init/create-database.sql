@@ -8,3 +8,5 @@ create
 database cache_db;
 create
 database messaging_event_saga_db;
+create
+database messaging_event_streams_db;
