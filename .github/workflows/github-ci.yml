@@ -26,7 +26,7 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Build and test
+      - name: Build and Test
         run: ./mvnw clean verify
 
       - name: Update PATCH version
@@ -55,7 +55,7 @@ jobs:
           git config user.email "teb-github-ci-actions@users.noreply.github.com"
 
           git add .
-          git commit -m "ci: version update to $NEW_VERSION" || exit 0
+          git commit -m "Version update to $NEW_VERSION" || exit 0
 
           git tag "v$NEW_VERSION"
 
