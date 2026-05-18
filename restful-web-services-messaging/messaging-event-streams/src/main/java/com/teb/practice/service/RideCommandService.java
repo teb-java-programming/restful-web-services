@@ -1,14 +1,9 @@
 package com.teb.practice.service;
 
-import static com.teb.practice.model.RideStatus.ASSIGNED;
-import static com.teb.practice.model.RideStatus.CANCELLED;
-import static com.teb.practice.model.RideStatus.PAYMENT_COMPLETED;
-import static com.teb.practice.model.RideStatus.REQUESTED;
-
 import static java.time.LocalDateTime.now;
+import static java.util.Objects.isNull;
 
 import com.teb.practice.event.RideEvent;
-import com.teb.practice.event.RideEventType;
 import com.teb.practice.model.Ride;
 import com.teb.practice.model.RideStatus;
 import com.teb.practice.repository.RideRepository;
@@ -25,6 +20,8 @@ public class RideCommandService {
 
     public void handle(RideEvent event) {
 
+        RideStatus newStatus = RideStatus.valueOf(event.getEventType().name());
+
         Ride ride =
                 rideRepository
                         .findById(event.getRideId())
@@ -33,39 +30,18 @@ public class RideCommandService {
                                         .rideId(event.getRideId())
                                         .userId(event.getUserId())
                                         .driverId(event.getDriverId())
+                                        .status(newStatus)
                                         .build());
 
-        // Terminal state check
-        if (ride.getStatus() == CANCELLED || ride.getStatus() == PAYMENT_COMPLETED) {
-            return;
-        }
+        if (isNull(event.getUserId())) event.setUserId(ride.getUserId());
 
-        // Cancellation allowed only before STARTED
-        if (event.getEventType() == RideEventType.CANCELLED) {
-            if (ride.getStatus() == REQUESTED || ride.getStatus() == ASSIGNED) {
-                ride.setStatus(CANCELLED);
-                ride.setUpdatedAt(now());
-
-                rideRepository.save(ride);
-            }
-
-            return;
-        }
-
-        if (event.getUserId() == null) event.setUserId(ride.getUserId());
-
-        if (event.getDriverId() == null) event.setDriverId(ride.getDriverId());
+        if (isNull(event.getDriverId())) event.setDriverId(ride.getDriverId());
 
         ride.setUserId(event.getUserId());
         ride.setDriverId(event.getDriverId());
-        ride.setStatus(map(event.getEventType()));
+        ride.setStatus(newStatus);
         ride.setUpdatedAt(now());
 
         rideRepository.save(ride);
-    }
-
-    private RideStatus map(RideEventType type) {
-
-        return RideStatus.valueOf(type.name());
     }
 }

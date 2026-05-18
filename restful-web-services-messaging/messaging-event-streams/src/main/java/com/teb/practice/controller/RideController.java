@@ -6,8 +6,7 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 
 import com.teb.practice.event.RideEvent;
-import com.teb.practice.service.RideCommandService;
-import com.teb.practice.service.RideEventStoreService;
+import com.teb.practice.service.RideFacadeService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +22,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RideController {
 
-    private final RideCommandService commandService;
-    private final RideEventStoreService eventStoreService;
+    private static final String RIDE_ID = "rideId";
+    private static final String STATUS = "status";
+
+    private final RideFacadeService rideFacadeService;
 
     @PostMapping("/request")
     public Map<String, String> request(@RequestBody Map<String, String> request) {
@@ -40,23 +41,20 @@ public class RideController {
                         .timestamp(now())
                         .build();
 
-        // Persist immutable event
-        eventStoreService.store(event);
+        rideFacadeService.process(event);
 
-        // CQRS state projection update
-        commandService.handle(event);
-
-        return Map.of("rideId", rideId, "status", "REQUESTED");
+        return Map.of(RIDE_ID, rideId, STATUS, REQUESTED.name());
     }
 
-    @PostMapping("/emit")
-    public Map<String, String> emit(@RequestBody RideEvent event) {
+    @PostMapping("/update")
+    public Map<String, String> update(@RequestBody RideEvent event) {
 
-        eventStoreService.store(event);
-        commandService.handle(event);
+        if (!rideFacadeService.process(event)) {
+            return Map.of(STATUS, "INVALID_EVENT");
+        }
 
         return Map.of(
-                "rideId", event.getRideId(),
-                "status", event.getEventType().name());
+                RIDE_ID, event.getRideId(),
+                STATUS, event.getEventType().name());
     }
 }

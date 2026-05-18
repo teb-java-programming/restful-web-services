@@ -6,16 +6,21 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 23
           distribution: 'temurin'
@@ -23,3 +28,37 @@ jobs:
 
       - name: Build and test
         run: ./mvnw clean install --batch-mode
+
+      - name: Bump PATCH version
+        if: github.event_name == 'push'
+        run: |
+          CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
+          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
+          PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
+
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+
+          echo "Updating version: $CURRENT_VERSION -> $NEW_VERSION"
+
+          ./mvnw versions:set \
+            -DnewVersion=$NEW_VERSION \
+            -DgenerateBackupPoms=false
+
+      - name: Commit and tag new version
+        if: github.event_name == 'push'
+        run: |
+          NEW_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+
+          git config user.name "teb-github-ci-actions"
+          git config user.email "teb-github-ci-actions@users.noreply.github.com"
+
+          git add .
+          git commit -m "ci: version update to $NEW_VERSION" || echo "No changes to commit"
+
+          git tag "v$NEW_VERSION"
+
+          git push
+          git push origin "v$NEW_VERSION"

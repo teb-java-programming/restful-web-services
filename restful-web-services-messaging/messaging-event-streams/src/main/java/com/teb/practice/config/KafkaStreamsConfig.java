@@ -3,6 +3,7 @@ package com.teb.practice.config;
 import static com.teb.practice.config.KafkaTopicConfig.RIDE_EVENTS_LIFECYCLE_TOPIC;
 import static com.teb.practice.config.KafkaTopicConfig.RIDE_EVENTS_PROCESSED_TOPIC;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.kafka.streams.kstream.Consumed.with;
 
 import static java.util.concurrent.ConcurrentHashMap.newKeySet;
@@ -33,12 +34,13 @@ public class KafkaStreamsConfig {
 
         stream.peek(
                         (key, value) -> {
-                            if (value != null && value.contains("\"eventType\":\"CANCELLED\"")) {
+                            if (isNotEmpty(value)
+                                    && value.contains("\"eventType\":\"CANCELLED\"")) {
                                 CANCELLED_RIDES.add(key);
                             }
                             log.info("Streaming in: {} -> {}", key, value);
                         })
-                .filter((key, value) -> value != null && !CANCELLED_RIDES.contains(key))
+                .filter((key, value) -> isNotEmpty(value) && !CANCELLED_RIDES.contains(key))
                 .to(RIDE_EVENTS_PROCESSED_TOPIC);
 
         return stream;
