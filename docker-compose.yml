@@ -48,5 +48,25 @@ services:
       RABBITMQ_DEFAULT_USER: rmq_user
       RABBITMQ_DEFAULT_PASS: rmq_pass
 
+  ibm-mq:
+    image: theencodedbong/ibm-mq-arm64:latest
+    container_name: ibm-mq
+    ports:
+      - "1414:1414"
+      - "9443:9443"
+    environment:
+      LICENSE: "accept"
+      MQ_QMGR_NAME: "QM1"
+      MQ_ADMIN_PASSWORD: "admin123!"
+      MQ_APP_PASSWORD: "app123!"
+    volumes:
+      - qm1data:/mnt/mqm
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9443" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 volumes:
   pgdata:
+  qm1data:

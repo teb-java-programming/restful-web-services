@@ -1,0 +1,11 @@
+spring:
+  jms:
+    pub-sub-domain: false
+    template:
+      default-destination: DEV.QUEUE.1
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

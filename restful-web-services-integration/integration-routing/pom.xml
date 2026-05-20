@@ -6,20 +6,16 @@
 
     <parent>
         <groupId>com.teb.practice</groupId>
-        <artifactId>restful-web-services-messaging</artifactId>
+        <artifactId>restful-web-services-integration</artifactId>
         <version>3.6.2</version>
     </parent>
 
-    <artifactId>messaging-camel-transaction</artifactId>
+    <artifactId>integration-routing</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-kafka-starter</artifactId>
+            <artifactId>camel-jms-starter</artifactId>
             <version>${camel.version}</version>
         </dependency>
     </dependencies>

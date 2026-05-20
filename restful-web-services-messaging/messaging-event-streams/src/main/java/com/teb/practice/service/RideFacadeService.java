@@ -14,12 +14,12 @@ public class RideFacadeService {
 
     private final RideRepository rideRepository;
     private final RideCommandService commandService;
-    private final RideEventValidator rideEventValidator;
+    private final RideEventValidator eventValidator;
     private final RideEventStoreService eventStoreService;
 
     public boolean process(RideEvent event) {
 
-        if (!rideEventValidator.isValid(
+        if (!eventValidator.isValid(
                 rideRepository.findById(event.getRideId()).orElse(null), event)) {
             return false;
         }

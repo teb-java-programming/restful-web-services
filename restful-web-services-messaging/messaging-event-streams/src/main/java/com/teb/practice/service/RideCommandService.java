@@ -20,28 +20,21 @@ public class RideCommandService {
 
     public void handle(RideEvent event) {
 
-        RideStatus newStatus = RideStatus.valueOf(event.getEventType().name());
-
         Ride ride =
                 rideRepository
                         .findById(event.getRideId())
-                        .orElse(
-                                Ride.builder()
-                                        .rideId(event.getRideId())
-                                        .userId(event.getUserId())
-                                        .driverId(event.getDriverId())
-                                        .status(newStatus)
-                                        .build());
+                        .orElseGet(() -> Ride.builder().rideId(event.getRideId()).build());
 
-        if (isNull(event.getUserId())) event.setUserId(ride.getUserId());
-
-        if (isNull(event.getDriverId())) event.setDriverId(ride.getDriverId());
-
-        ride.setUserId(event.getUserId());
-        ride.setDriverId(event.getDriverId());
-        ride.setStatus(newStatus);
+        ride.setUserId(coalesce(event.getUserId(), ride.getUserId()));
+        ride.setDriverId(coalesce(event.getDriverId(), ride.getDriverId()));
+        ride.setStatus(RideStatus.valueOf(event.getEventType().name()));
         ride.setUpdatedAt(now());
 
         rideRepository.save(ride);
+    }
+
+    private <T> T coalesce(T actual, T expected) {
+
+        return isNull(actual) ? expected : actual;
     }
 }

@@ -1,5 +1,6 @@
 package com.teb.practice.controller;
 
+import static com.teb.practice.event.RideEventType.ASSIGNED;
 import static com.teb.practice.event.RideEventType.REQUESTED;
 
 import static java.time.LocalDateTime.now;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class RideController {
 
     private static final String RIDE_ID = "rideId";
+    private static final String USER_ID = "userId";
     private static final String STATUS = "status";
 
     private final RideFacadeService rideFacadeService;
@@ -31,11 +33,12 @@ public class RideController {
     public Map<String, String> request(@RequestBody Map<String, String> request) {
 
         String rideId = randomUUID().toString();
+        String userId = request.get(USER_ID);
 
         RideEvent event =
                 RideEvent.builder()
                         .rideId(rideId)
-                        .userId(request.get("userId"))
+                        .userId(userId)
                         .driverId(null)
                         .eventType(REQUESTED)
                         .timestamp(now())
@@ -43,7 +46,7 @@ public class RideController {
 
         rideFacadeService.process(event);
 
-        return Map.of(RIDE_ID, rideId, STATUS, REQUESTED.name());
+        return Map.of(RIDE_ID, rideId, USER_ID, userId, STATUS, REQUESTED.name());
     }
 
     @PostMapping("/update")
@@ -51,6 +54,16 @@ public class RideController {
 
         if (!rideFacadeService.process(event)) {
             return Map.of(STATUS, "INVALID_EVENT");
+        }
+
+        if (ASSIGNED.equals(event.getEventType())) {
+            return Map.of(
+                    RIDE_ID,
+                    event.getRideId(),
+                    "driverId",
+                    event.getDriverId(),
+                    STATUS,
+                    event.getEventType().name());
         }
 
         return Map.of(
