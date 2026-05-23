@@ -1,0 +1,51 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - prometheus
+
+  endpoint:
+    health:
+      show-details: always
+
+  metrics:
+    tags:
+      application: integration-observability
+
+  tracing:
+    enabled: true
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+
+  observations:
+    enabled: true
+    web:
+      enabled: true
+    http:
+      server:
+        enabled: true
+
+  health:
+    jms:
+      enabled: false
+
+camel:
+  metrics:
+    enable-route-policy: true
+    enable-message-history: true
+    enable-exchange-event-notifier: true
+
+logging:
+  pattern:
+    level: "%5p [traceId=%X{traceId:-},spanId=%X{spanId:-}]"
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

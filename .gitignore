@@ -70,6 +70,7 @@ pom.xml.versionsBackup
 
 # Log files
 *.log
+*.log.*
 
 # Lock and temporary files
 *.lck

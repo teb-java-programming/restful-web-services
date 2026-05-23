@@ -11,6 +11,7 @@ public class StartupRoute extends RouteBuilder {
 
         from("timer:start?repeatCount=1")
                 .routeId("startup-route")
-                .log("Camel routing engine started");
+                .log("Camel routing engine started")
+                .log("StartupRoute is active");
     }
 }
