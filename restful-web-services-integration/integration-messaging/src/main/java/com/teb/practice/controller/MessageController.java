@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private static final String QUEUE_NAME = "DEV.QUEUE.1";
+    private static final String QUEUE_NAME = "TEB.MSG.QUEUE";
     private static final String MESSAGE_STATUS = "status";
 
     private final JmsTemplate jmsTemplate;
@@ -28,9 +28,11 @@ public class MessageController {
     @PostMapping("/send")
     public Map<String, String> send(@Valid @RequestBody MessageRequest request) {
 
-        jmsTemplate.convertAndSend(QUEUE_NAME, request.message());
+        String requestMessage = request.message();
 
-        return Map.of(MESSAGE_STATUS, "SENT", "queue", QUEUE_NAME);
+        jmsTemplate.convertAndSend(QUEUE_NAME, requestMessage);
+
+        return Map.of(MESSAGE_STATUS, "SENT", "queue", QUEUE_NAME, "message", requestMessage);
     }
 
     @GetMapping("/health")

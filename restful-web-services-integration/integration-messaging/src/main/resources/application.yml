@@ -5,7 +5,7 @@ spring:
   jms:
     pub-sub-domain: false
     template:
-      default-destination: DEV.QUEUE.1
+      default-destination: TEB.MSG.QUEUE
 
 springdoc:
   api-docs:

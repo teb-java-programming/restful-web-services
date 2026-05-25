@@ -11,12 +11,4 @@
     </parent>
 
     <artifactId>integration-routing</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-log-starter</artifactId>
-            <version>${camel.version}</version>
-        </dependency>
-    </dependencies>
 </project>

@@ -28,6 +28,16 @@
             <groupId>com.ibm.mq</groupId>
             <artifactId>mq-jms-spring-boot-starter</artifactId>
             <version>4.0.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk18on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk18on</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
@@ -66,14 +76,18 @@
                                         <argument>-c</argument>
                                         <argument>
                                             docker exec -i ibm-mq runmqsc QM1 &lt;&lt;EOF
-                                            DEFINE QLOCAL('DEV.ERROR.QUEUE') REPLACE
-                                            DEFINE QLOCAL(EVENT.SUCCESS) REPLACE
-                                            DEFINE QLOCAL(EVENT.FAILURE) REPLACE
-                                            DEFINE QLOCAL(EVENT.DLQ) REPLACE
-                                            SET AUTHREC PROFILE(EVENT.SUCCESS) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
-                                            SET AUTHREC PROFILE(EVENT.FAILURE) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
-                                            SET AUTHREC PROFILE(EVENT.DLQ) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
-                                            END
+
+                                            define qlocal(TEB.MSG.QUEUE) replace
+                                            define qlocal(EVENT.SUCCESS) replace
+                                            define qlocal(EVENT.FAILURE) replace
+                                            define qlocal(EVENT.DLQ) replace
+
+                                            set authrec profile(TEB.MSG.QUEUE) objtype(queue) principal('app') authadd(all)
+                                            set authrec profile(EVENT.SUCCESS) objtype(queue) principal('app') authadd(all)
+                                            set authrec profile(EVENT.FAILURE) objtype(queue) principal('app') authadd(all)
+                                            set authrec profile(EVENT.DLQ) objtype(queue) principal('app') authadd(all)
+
+                                            end
                                             EOF
                                         </argument>
                                     </arguments>

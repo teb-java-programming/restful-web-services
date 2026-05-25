@@ -9,12 +9,10 @@ public class JmsToCamelRoute extends RouteBuilder {
     @Override
     public void configure() {
 
-        from("jms:queue:DEV.QUEUE.1")
+        from("jms:queue:TEB.MSG.QUEUE")
                 .routeId("jms-to-camel-route")
-
                 .setHeader("traceId", simple("${exchangeId}"))
-                .log("Received message | body=${body} | traceId=${header.traceId}")
-
+                .log("Received message | body: ${body} | traceId: ${header.traceId}")
                 .to("direct:processMessage");
     }
 }

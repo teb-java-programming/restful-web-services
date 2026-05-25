@@ -17,23 +17,20 @@ public class BusinessRoute extends RouteBuilder {
                         .useOriginalMessage()
                         .logRetryAttempted(true)
                         .retryAttemptedLogLevel(LoggingLevel.WARN)
-                        .logExhausted(true)
-        );
+                        .logExhausted(true));
 
         from("direct:businessRoute")
                 .routeId("business-route")
-
-                // ✔ Redelivery tracking
-                .log("BUSINESS ROUTE processing: ${body}")
-                .log("Exchange ID: ${exchangeId}")
-                .log("TRACE CHECK | traceId=${header.traceId}")
+                .log("Business process | body: ${body} | traceId: ${header.traceId}")
                 .choice()
+
                 .when(simple("${body} contains 'error'"))
-                .log("Business failure triggered")
+                .log("Business process failure | body: ${body} | traceId: ${header.traceId}")
                 .to("jms:queue:EVENT.FAILURE")
-                .throwException(new RuntimeException("Business error"))
+                .throwException(new RuntimeException("Business process error"))
+
                 .otherwise()
-                .log("Business success: ${body}")
+                .log("Business process success | body: ${body} | traceId: ${header.traceId}")
                 .to("jms:queue:EVENT.SUCCESS")
                 .to("direct:finalRoute")
                 .end();
