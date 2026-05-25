@@ -1,0 +1,14 @@
+server:
+  port: 8082
+
+spring:
+  jms:
+    pub-sub-domain: false
+    template:
+      default-destination: TEB.MSG.QUEUE
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

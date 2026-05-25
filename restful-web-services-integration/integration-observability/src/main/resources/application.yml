@@ -1,0 +1,58 @@
+server:
+  port: 8081
+
+ibm:
+  mq:
+    queueManager: QM1
+    channel: DEV.APP.SVRCONN
+    connName: localhost(1414)
+    user: app
+    password: app123!
+
+camel:
+  metrics:
+    enable-route-policy: true
+    enable-message-history: true
+    enable-exchange-event-notifier: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - prometheus
+
+  endpoint:
+    health:
+      show-details: always
+
+  metrics:
+    tags:
+      application: integration-observability
+
+  tracing:
+    enabled: true
+    propagation:
+      type: w3c
+    sampling:
+      probability: 1.0
+
+  observations:
+    enabled: true
+    web:
+      enabled: true
+    http:
+      server:
+        enabled: true
+
+  health:
+    jms:
+      enabled: false
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

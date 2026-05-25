@@ -22,6 +22,7 @@
         <module>restful-web-services-security</module>
         <module>restful-web-services-cache</module>
         <module>restful-web-services-messaging</module>
+        <module>restful-web-services-integration</module>
     </modules>
 
     <properties>
@@ -29,6 +30,7 @@
         <lombok.version>1.18.46</lombok.version>
         <camel.version>4.20.0</camel.version>
         <jwt.version>0.13.0</jwt.version>
+        <exec.plugin.version>3.6.3</exec.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -40,6 +42,11 @@
                 <version>3.1.2</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel.springboot</groupId>
+                <artifactId>camel-spring-boot-starter</artifactId>
+                <version>${camel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -135,7 +142,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.6.3</version>
+                        <version>${exec.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>docker-up</id>
@@ -150,7 +157,6 @@
                                         <argument>up</argument>
                                         <argument>-d</argument>
                                     </arguments>
-                                    <failOnError>true</failOnError>
                                 </configuration>
                             </execution>
                         </executions>
