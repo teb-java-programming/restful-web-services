@@ -1,8 +1,5 @@
 package com.teb.practice.route;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
-import lombok.RequiredArgsConstructor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +11,10 @@ public class DeadLetterRoute extends RouteBuilder {
 
         from("direct:deadLetterRoute")
                 .routeId("dead-letter-route")
-                .log("ENTER DLQ: ${body}")
+                .setHeader("traceId", simple("${exchangeId}"))
 
-                .log("Message moved to dead letter flow: ${body}");
+                .log("ENTER DLQ: ${body}")
+                .log("DLQ ENTRY | traceId=${header.traceId} | body=${body}")
+                .to("jms:queue:EVENT.DLQ");
     }
 }

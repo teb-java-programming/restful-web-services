@@ -12,9 +12,8 @@ public class JmsToCamelRoute extends RouteBuilder {
         from("jms:queue:DEV.QUEUE.1")
                 .routeId("jms-to-camel-route")
 
-                .log("ENTER route=jms-to-camel | body=${body}")
-
-                .log("STEP 1: consumed from DEV.QUEUE.1")
+                .setHeader("traceId", simple("${exchangeId}"))
+                .log("Received message | body=${body} | traceId=${header.traceId}")
 
                 .to("direct:processMessage");
     }

@@ -1,11 +1,17 @@
 package com.teb.practice.controller;
 
 import com.teb.practice.model.MessageRequest;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -14,21 +20,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageController {
 
+    private static final String QUEUE_NAME = "DEV.QUEUE.1";
+    private static final String MESSAGE_STATUS = "status";
+
     private final JmsTemplate jmsTemplate;
 
     @PostMapping("/send")
     public Map<String, String> send(@Valid @RequestBody MessageRequest request) {
 
-        jmsTemplate.convertAndSend("DEV.QUEUE.1", request.message());
+        jmsTemplate.convertAndSend(QUEUE_NAME, request.message());
 
-        return Map.of(
-                "status", "SENT",
-                "queue", "DEV.QUEUE.1");
+        return Map.of(MESSAGE_STATUS, "SENT", "queue", QUEUE_NAME);
     }
 
     @GetMapping("/health")
     public Map<String, String> health() {
 
-        return Map.of("status", "UP");
+        return Map.of(MESSAGE_STATUS, "UP");
     }
 }

@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>integration-observability</module>
         <module>integration-messaging</module>
         <module>integration-routing</module>
-        <module>integration-observability</module>
     </modules>
 
     <dependencies>
@@ -31,7 +31,16 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-jms-starter</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
     </dependencies>
 
@@ -58,6 +67,12 @@
                                         <argument>
                                             docker exec -i ibm-mq runmqsc QM1 &lt;&lt;EOF
                                             DEFINE QLOCAL('DEV.ERROR.QUEUE') REPLACE
+                                            DEFINE QLOCAL(EVENT.SUCCESS) REPLACE
+                                            DEFINE QLOCAL(EVENT.FAILURE) REPLACE
+                                            DEFINE QLOCAL(EVENT.DLQ) REPLACE
+                                            SET AUTHREC PROFILE(EVENT.SUCCESS) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
+                                            SET AUTHREC PROFILE(EVENT.FAILURE) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
+                                            SET AUTHREC PROFILE(EVENT.DLQ) OBJTYPE(QUEUE) PRINCIPAL('app') AUTHADD(ALL)
                                             END
                                             EOF
                                         </argument>

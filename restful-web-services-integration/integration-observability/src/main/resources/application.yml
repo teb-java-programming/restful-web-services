@@ -1,3 +1,20 @@
+server:
+  port: 8081
+
+ibm:
+  mq:
+    queueManager: QM1
+    channel: DEV.APP.SVRCONN
+    connName: localhost(1414)
+    user: app
+    password: app123!
+
+camel:
+  metrics:
+    enable-route-policy: true
+    enable-message-history: true
+    enable-exchange-event-notifier: true
+
 management:
   endpoints:
     web:
@@ -33,16 +50,6 @@ management:
   health:
     jms:
       enabled: false
-
-camel:
-  metrics:
-    enable-route-policy: true
-    enable-message-history: true
-    enable-exchange-event-notifier: true
-
-logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId:-},spanId=%X{spanId:-}]"
 
 springdoc:
   api-docs:

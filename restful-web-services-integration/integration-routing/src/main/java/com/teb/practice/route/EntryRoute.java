@@ -11,10 +11,7 @@ public class EntryRoute extends RouteBuilder {
 
         from("direct:processMessage")
                 .routeId("entry-route")
-
-                .log("ENTRY ROUTE: ${body}")
-                .log("TRACE INFO: ${exchangeId}")
-
+                .log("Message routed | body: ${body} | traceId: ${header.traceId}")
                 .to("direct:businessRoute");
     }
 }
