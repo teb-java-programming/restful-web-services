@@ -2,7 +2,7 @@
 
 ## Modules
 
-#### Restful Web Services Spring Boot (restful-web-services-spring-boot)**
+#### Restful Web Services Spring Boot (restful-web-services-spring-boot) _[1]_
 
 #### Restful Web Services using JPA (restful-web-services-jpa)
 
@@ -10,10 +10,19 @@
 
 #### Restful Web Services with JWT (restful-web-services-security)
 
-** Some submodules use older versions of dependencies that might no
+#### Restful Web Services using Caffeine, Redis (restful-web-services-cache)
+
+#### Restful Web Services using Kafka, RabbitMQ, Camel, CQRS (restful-web-services-messaging)
+
+#### Restful Web Services with JMS Message Routing (restful-web-services-integration) _[2]_
+
+[1] Some submodules use older versions of dependencies that might no
 longer be supported or be secure, and therefore are skipped during build.
 The dependencies are explicitly declared in the respective `pom.xml` as the parent module uses
 latest versions.
+
+[2] To test integration, run `mvn clean install -P mqBootstrap` first from within `/restful-web-services-integration`
+directory to create queues and grant authorisation.
 
 ***
 
@@ -23,9 +32,10 @@ The project requires the following software and plugins to be installed.
 
 #### Software
 
-- Java 17 and above (archived modules require lower versions)
+- Java 21 and above (archived modules require lower versions)
 - Maven
 - Git
+- Docker
 
 #### Plugin
 

@@ -41,12 +41,17 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-jms-starter</artifactId>
             <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
+            <artifactId>camel-micrometer-starter</artifactId>
+            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -77,11 +82,13 @@
                                         <argument>
                                             docker exec -i ibm-mq runmqsc QM1 &lt;&lt;EOF
 
+                                            <!-- Create new queues or replace existing ones -->
                                             define qlocal(TEB.MSG.QUEUE) replace
                                             define qlocal(EVENT.SUCCESS) replace
                                             define qlocal(EVENT.FAILURE) replace
                                             define qlocal(EVENT.DLQ) replace
 
+                                            <!-- Authorise queues to send/receive messages -->
                                             set authrec profile(TEB.MSG.QUEUE) objtype(queue) principal('app') authadd(all)
                                             set authrec profile(EVENT.SUCCESS) objtype(queue) principal('app') authadd(all)
                                             set authrec profile(EVENT.FAILURE) objtype(queue) principal('app') authadd(all)

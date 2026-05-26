@@ -1,5 +1,8 @@
 package com.teb.practice.controller;
 
+import static java.lang.System.currentTimeMillis;
+import static java.util.UUID.randomUUID;
+
 import com.teb.practice.model.MessageRequest;
 
 import jakarta.validation.Valid;
@@ -30,7 +33,15 @@ public class MessageController {
 
         String requestMessage = request.message();
 
-        jmsTemplate.convertAndSend(QUEUE_NAME, requestMessage);
+        jmsTemplate.convertAndSend(
+                QUEUE_NAME,
+                requestMessage,
+                message -> {
+                    message.setStringProperty("traceId", randomUUID().toString());
+                    message.setLongProperty("startTime", currentTimeMillis());
+
+                    return message;
+                });
 
         return Map.of(MESSAGE_STATUS, "SENT", "queue", QUEUE_NAME, "message", requestMessage);
     }

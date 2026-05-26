@@ -11,8 +11,8 @@ public class DeadLetterRoute extends RouteBuilder {
 
         from("direct:deadLetterRoute")
                 .routeId("dead-letter-route")
-                .setHeader("traceId", simple("${exchangeId}"))
-                .log("DLQ received | body: ${body} | traceId: ${header.traceId}")
-                .to("jms:queue:EVENT.DLQ");
+                .log("Message sent to DLQ | body: ${body} | traceId: ${header.traceId}")
+                .to("jms:queue:EVENT.DLQ")
+                .end();
     }
 }

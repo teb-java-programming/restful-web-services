@@ -6,6 +6,9 @@ spring:
     pub-sub-domain: false
     template:
       default-destination: TEB.MSG.QUEUE
+  sleuth:
+    propagation:
+      type: w3c
 
 springdoc:
   api-docs:

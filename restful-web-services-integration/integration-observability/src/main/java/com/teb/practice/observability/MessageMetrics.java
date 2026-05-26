@@ -14,9 +14,9 @@ public class MessageMetrics {
 
     public MessageMetrics(MeterRegistry registry) {
 
-        this.success = registry.counter("app.messages.success");
-        this.failure = registry.counter("app.messages.failure");
-        this.dlq = registry.counter("app.messages.dlq");
+        this.success = registry.counter("app.messages.success", "type", "success");
+        this.failure = registry.counter("app.messages.failure", "type", "failure");
+        this.dlq = registry.counter("app.messages.dlq", "type", "dlq");
     }
 
     public void success() {

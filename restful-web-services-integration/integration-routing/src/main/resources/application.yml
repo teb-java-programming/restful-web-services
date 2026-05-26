@@ -13,6 +13,15 @@ ibm:
     user: app
     password: app123!
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - prometheus
+
 springdoc:
   api-docs:
     enabled: false
