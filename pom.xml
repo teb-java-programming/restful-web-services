@@ -13,7 +13,7 @@
     <groupId>com.teb.practice</groupId>
     <artifactId>restful-web-services</artifactId>
     <packaging>pom</packaging>
-    <version>3.7.0</version>
+    <version>3.7.1</version>
 
     <modules>
         <module>restful-web-services-spring-boot</module>
