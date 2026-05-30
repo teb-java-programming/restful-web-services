@@ -83,6 +83,14 @@ services:
     depends_on:
       - prometheus
 
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - "4318:4318"
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+
 volumes:
   pgdata:
   qm1data:

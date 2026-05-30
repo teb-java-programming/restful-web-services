@@ -10,6 +10,23 @@ spring:
     propagation:
       type: w3c
 
+ibm:
+  mq:
+    host: localhost
+    port: 1414
+    queue-manager: QM1
+    channel: DEV.APP.SVRCONN
+    username: app
+    password: app123!
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://localhost:4318
+      enabled: false
+  sdk:
+    disabled: false
+
 springdoc:
   api-docs:
     enabled: false
