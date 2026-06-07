@@ -17,8 +17,8 @@ public class UserRepository {
     private static final List<User> allUsers =
             new ArrayList<>(
                     List.of(
-                            new User("U01", "Steve", "austin316@test.com"),
-                            new User("U02", "John", "ucantcme@test.com")));
+                            new User("U0192", "Steve", "austin_316@test.com"),
+                            new User("U0216", "John", "ucant.cme@test.com")));
 
     public List<User> getUsers() {
 
