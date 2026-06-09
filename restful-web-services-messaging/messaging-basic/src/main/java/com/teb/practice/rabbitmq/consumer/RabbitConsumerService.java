@@ -43,7 +43,7 @@ public class RabbitConsumerService {
             messageProcessingService.process(eventMessage, 1);
             idempotencyService.markAsProcessed(messageId);
             channel.basicAck(deliveryTag, false);
-        } catch (Exception exception) {
+        } catch (Exception e) {
             retryHandler.retryRabbitMessage(messageId, channel, deliveryTag);
         }
     }
