@@ -51,6 +51,8 @@ public class PublicController {
 
         log.debug("List of users: {}", users);
 
-        return users.stream().map(user -> new PublicResponse(user.getId())).toList();
+        return users.stream()
+                .map(user -> new PublicResponse(user.getId(), user.getName()))
+                .toList();
     }
 }

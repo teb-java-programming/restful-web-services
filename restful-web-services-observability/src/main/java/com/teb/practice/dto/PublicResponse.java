@@ -1,3 +1,3 @@
 package com.teb.practice.dto;
 
-public record PublicResponse(String id) {}
+public record PublicResponse(String id, String name) {}

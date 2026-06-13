@@ -12,17 +12,6 @@ management:
     health:
       show-details: always
 
-  info:
-    env:
-      enabled: true
-
-info:
-  module: restful-web-services-observability
-  topics: Actuator
-  build:
-    java: 23
-    framework: spring-boot
-
 logging:
   level:
     root: INFO
