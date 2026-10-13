@@ -88,3 +88,5 @@ http-client.private.env.json
 
 # System files
 .DS_Store
+Thumbs.db
+Desktop.ini
