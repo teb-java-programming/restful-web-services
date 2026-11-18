@@ -4,17 +4,17 @@
 
 #### Restful Web Services Spring Boot (restful-web-services-spring-boot) _[1]_
 
+#### Restful Web Services using Caffeine, Redis (restful-web-services-cache)
+
+#### Restful Web Services with JMS Message Routing (restful-web-services-integration) _[2]_
+
 #### Restful Web Services using JPA (restful-web-services-jpa)
+
+#### Restful Web Services using Kafka, RabbitMQ, Camel, CQRS (restful-web-services-messaging)
 
 #### Restful Web Services using Actuator, Swagger (restful-web-services-observability)
 
 #### Restful Web Services with JWT (restful-web-services-security)
-
-#### Restful Web Services using Caffeine, Redis (restful-web-services-cache)
-
-#### Restful Web Services using Kafka, RabbitMQ, Camel, CQRS (restful-web-services-messaging)
-
-#### Restful Web Services with JMS Message Routing (restful-web-services-integration) _[2]_
 
 [1] Some submodules use older versions of dependencies that might no
 longer be supported or be secure, and therefore are skipped during build.
