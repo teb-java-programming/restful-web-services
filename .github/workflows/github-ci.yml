@@ -15,14 +15,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
-          java-version: 23
+          java-version: 25
           distribution: temurin
           cache: maven
 
@@ -31,40 +31,100 @@ jobs:
 
       - name: Update Version
         if: github.event_name == 'push'
+        id: increment
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          set -euo pipefail
 
-          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
-          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
-          PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
+          COMMIT_SUBJECT="${COMMIT_MESSAGE%%$'\n'*}"
 
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-          if [[ "$COMMIT_MESSAGE" == *"Merge pull request"* ]]; then
-            echo "PR merge detected -> PATCH bump"
-            NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
-          else
-            echo "Direct push detected -> MINOR bump"
-            NEW_VERSION="$MAJOR.$((MINOR + 1)).0"
+          if [[ ! "$COMMIT_SUBJECT" =~ ^(fix|bug|feature|update|checkpoint):[[:space:]]+.+$ ]]; then
+            echo "::error::Invalid commit prefix. Expected: fix:, bug:, feature:, update:, checkpoint:."
+            echo "::error::Commit subject: ${COMMIT_SUBJECT}"
+            exit 1
           fi
 
-          echo "Updating version: $CURRENT_VERSION -> $NEW_VERSION"
+          PREFIX="${BASH_REMATCH[1]}"
 
-          ./mvnw versions:set \
-            -DnewVersion=$NEW_VERSION \
-            -DgenerateBackupPoms=false
+          case "$PREFIX" in
+            fix|bug)
+              INCREMENT_TYPE="patch"
+              ;;
+            feature|update)
+              INCREMENT_TYPE="minor"
+              ;;
+            checkpoint)
+              INCREMENT_TYPE="major"
+              ;;
+          esac
+
+          echo "Commit subject: ${COMMIT_SUBJECT}"
+          echo "Prefix: ${PREFIX}"
+          echo "Version increment: ${INCREMENT_TYPE}"
+
+          echo "type=${INCREMENT_TYPE}" >> "$GITHUB_OUTPUT"
 
       - name: Commit and Tag
         if: github.event_name == 'push'
+        env:
+          INCREMENT_TYPE: ${{ steps.increment.outputs.type }}
         run: |
-          NEW_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          set -euo pipefail
+
+          CURRENT_VERSION=$(./mvnw help:evaluate \
+            -Dexpression=project.version \
+            -q -DforceStdout)
+
+          if [[ ! "$CURRENT_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "::error::Invalid Maven project version: ${CURRENT_VERSION}. Expected MAJOR.MINOR.PATCH."
+            exit 1
+          fi
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+
+          case "$INCREMENT_TYPE" in
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            *)
+              echo "::error::Unknown version increment: ${INCREMENT_TYPE}"
+              exit 1
+              ;;
+          esac
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+
+          echo "Updating version: ${CURRENT_VERSION} -> ${NEW_VERSION}"
+
+          ./mvnw versions:set \
+            -DnewVersion="$NEW_VERSION" \
+            -DgenerateBackupPoms=false
 
           git config user.name "teb-github-ci-actions"
           git config user.email "teb-github-ci-actions@users.noreply.github.com"
 
           git add .
-          git commit -m "Version update to $NEW_VERSION" || exit 0
+          git commit -m "Version update to ${NEW_VERSION}"
 
-          git tag "v$NEW_VERSION"
+          TAG="v${NEW_VERSION}"
 
-          git push
-          git push origin "v$NEW_VERSION"
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" > /dev/null 2>&1; then
+            echo "::error::Tag ${TAG} already exists on origin."
+            exit 1
+          fi
+
+          git tag "$TAG"
+
+          git push --atomic origin \
+            HEAD:refs/heads/main \
+            "refs/tags/${TAG}"

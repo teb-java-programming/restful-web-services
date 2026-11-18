@@ -55,7 +55,7 @@ changes. To contribute to the project, please follow the steps below.
 ```
 git clone git@github.com:teb-java-programming/restful-web-services.git
 git checkout -b <newBranch>
-git checkout <main> <existingBranch>
+git switch <existingBranch>
 ```
 
 - Check the files in the project that have been added or updated

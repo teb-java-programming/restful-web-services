@@ -20,18 +20,9 @@
         <dependency>
             <groupId>dev.samstevens.totp</groupId>
             <artifactId>totp</artifactId>
+            <!-- Last version released Nov-2020 -->
             <version>1.7.1</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.tomcat.embed</groupId>
-                    <artifactId>tomcat-embed-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.beust</groupId>
-                    <artifactId>jcommander</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>
